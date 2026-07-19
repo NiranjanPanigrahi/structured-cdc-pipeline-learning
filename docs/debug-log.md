@@ -9,7 +9,7 @@ at first, since I'd been troubleshooting Docker separately. Took a moment to
 realize this was happening at the WSL install step itself, before Docker was
 even involved.
 
-HEAD
+
 **Actual root cause:** The standard `wsl --install` command pulls the Linux
 kernel and Ubuntu image through the Microsoft Store backend, which was being
 blocked or failing on my network — general internet access (ping google.com)
@@ -85,7 +85,6 @@ correctly (pasted only into the terminal prompt, never elsewhere).
 **Time lost:** ~5 minutes, no lasting impact since it was caught and revoked
 right away.
 
-```
 Day 1: WSL install failed via Store (network), fixed with --web-download.
 Downloaded wrong Docker arch (ARM64 instead of AMD64) - wasted a download.
 Git push rejected - GitHub repo had .gitignore/LICENSE already, needed
