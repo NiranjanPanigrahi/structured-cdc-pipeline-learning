@@ -1,47 +1,22 @@
-# Week XX — [Topic]
+  GNU nano 8.7.1                                                                  README.md *
+- Clean git history with a successful push confirmed via `git log --oneline` — see `screenshots/git-push-success.png`
 
-Copy this into each `week-XX-*/README.md` and fill in as you go through the week.
-Keep it honest — half-finished checkpoints and real bugs are more valuable here
-than a polished-looking summary.
+## Debug log (see full log in `docs/debug-log.md`)
 
-## Goal
+The single biggest time sink today was `wsl --install` failing with "A connection with the server could not be established" — worked around by using `wsl --install ->
 
-_1 line, copied from the training plan._
-
-## What I built
-
-- _Bullet 1 — concrete, specific ("Deployed Debezium MySQL connector via Kafka
-  Connect, verified RUNNING status via REST API" not "worked on Debezium")_
-- _Bullet 2_
-- _Bullet 3_
-
-## Friday checkpoint
-
-**Target:** _copy the checkpoint from the plan_
-
-**Result:** ✅ Met / 🟡 Partially met / ❌ Not met — _one line on what actually happened_
-
-_(Screenshot, short clip, or command output here if you have one)_
-
-## Debug log
-
-_The most valuable section. Pull 1–2 entries from your daily debug log this week._
-
-**What broke:** ...
-**Why (my best guess at the time):** ...
-**Actual root cause:** ...
-**Fix:** ...
+Full entries in the project-wide debug log — this week alone covers a Store-connectivity failure, a CPU architecture mixup (ARM64 vs AMD64), a git divergent-historie>
 
 ## What I'd do differently
 
-_1–3 sentences. Shows judgment, not just execution._
+Would download and verify the correct Docker Desktop architecture (AMD64, not ARM64) before starting the install — cost some time re-downloading. Would also double c>
 
-## Day-by-day (optional, for your own tracking)
+## Day-by-day
 
 | Day | Task | Done |
 |-----|------|------|
-| 1 | | ⬜ |
-| 2 | | ⬜ |
-| 3 | | ⬜ |
-| 4 | | ⬜ |
-| 5 | | ⬜ |
+| 1 | WSL2 + Ubuntu + Docker Desktop + VS Code + live GitHub repo | ✅ |
+| 2 | Linux CLI basics | ⬜ |
+| 3 | CLI power tools (grep/awk/sed/piping) | ⬜ |
+| 4 | Git fundamentals | ⬜ |
+| 5 | Git branching & PR workflow | ⬜ |
