@@ -13,10 +13,9 @@ Would download and verify the correct Docker Desktop architecture (AMD64, not AR
 
 ## Day-by-day
 
-| Day | Task | Done |
-|-----|------|------|
-| 1 | WSL2 + Ubuntu + Docker Desktop + VS Code + live GitHub repo | ✅ |
-| 2 | Linux CLI basics | ⬜ |
-| 3 | CLI power tools (grep/awk/sed/piping) | ⬜ |
-| 4 | Git fundamentals | ⬜ |
-| 5 | Git branching & PR workflow | ⬜ |
+Day  Task                                    Done
+1    WSL2 + Ubuntu + Docker Desktop...       ✅
+2    Linux CLI basics                        ✅
+3    CLI power tools (grep/awk/sed/piping)   ✅
+4    Git fundamentals                        ⬜
+5    Git branching & PR workflow             ⬜
