@@ -91,3 +91,102 @@ Git push rejected - GitHub repo had .gitignore/LICENSE already, needed
 --allow-unrelated-histories merge. Accidentally pasted PAT into open chat,
 revoked immediately, regenerated.
  7c4bffe7aa90b137af240adab31ca6047d748376
+
+## [Week 1, Day 2] — `mkdir` created a directory instead of a file
+
+**What broke:** Ran `mkdir test.sh` intending to create an empty file to
+practice `chmod` on, then tried to `cd` into it expecting to edit it.
+
+**Why I thought it broke:** Assumed the `.sh` extension would make `mkdir`
+treat it as a file, or that I'd just made a typo somewhere.
+
+**Actual root cause:** `mkdir` always creates a directory, regardless of
+the name given to it — a file extension like `.sh` is purely a naming
+convention for humans (and some tools), it has no effect on what `mkdir`
+actually does.
+
+**Fix:** `rmdir test.sh` to remove the empty directory, then `touch test.sh`
+to actually create it as a file, before continuing with the `chmod` drill.
+
+**Time lost:** ~2 minutes.
+
+---
+
+## [Week 1, Day 3] — WSL2 ↔ Docker Desktop integration silently broke
+
+**What broke:** `docker compose up -d` failed with
+`/usr/bin/docker: Input/output error`. Later in the same day, after a
+restart, `docker` commands failed again with
+`The command 'docker' could not be found in this WSL 2 distro`, even
+though Docker Desktop's own GUI showed the engine running normally.
+
+**Why I thought it broke:** Assumed Docker Desktop itself was unhealthy,
+or that the WSL Integration toggle in Docker Desktop's settings had been
+switched off.
+
+**Actual root cause:** Traced it with `which docker`, `ls -la /usr/bin/docker`,
+and `ls -la /mnt/wsl/`. Found that `/usr/bin/docker` is a symlink pointing to
+`/mnt/wsl/docker-desktop/cli-tools/usr/bin/docker` — a path that Docker
+Desktop creates dynamically when its WSL2 integration mount is healthy.
+That directory didn't exist at all, meaning the integration mount itself
+had failed to attach, not the Docker engine.
+
+**Fix:** Fully quit Docker Desktop (not just close the window — used the
+system tray icon's "Quit Docker Desktop"), ran `wsl --shutdown` from
+PowerShell, waited, then relaunched Docker Desktop fresh. Confirmed with
+`ls -la /mnt/wsl/` that `docker-desktop` reappeared, then `docker ps`
+worked correctly from WSL again.
+
+**Time lost:** ~45-60 minutes, including one dead-end checking the WSL
+Integration toggle (which was already correctly enabled the whole time).
+
+---
+
+## [Week 1, Day 3] — `sed` preview mode mistaken for an actual file edit
+
+**What broke:** Ran `sed 's/ERROR/CRITICAL/' sample.log`, saw the
+substituted text printed correctly in the terminal, and assumed the file
+itself had been updated. A follow-up `grep -i critical sample.log`
+returned nothing.
+
+**Why I thought it broke:** Assumed `grep` was somehow failing to match
+text that was clearly visible moments earlier in the terminal.
+
+**Actual root cause:** `sed` without the `-i` flag never modifies the
+original file — it only prints a preview of what the substitution would
+look like. The terminal output was real, but it was never written back
+to disk, so the file on disk still said `ERROR` the whole time.
+
+**Fix:** Committed the file to git first as a safety baseline, then re-ran
+the same substitution with `sed -i 's/ERROR/CRITICAL/' sample.log`, which
+edits in place. Confirmed the change stuck with `grep -i critical`
+afterward.
+
+**Time lost:** ~10 minutes, mostly spent confused about why `grep` "wasn't
+working" before realizing the file was never actually touched.
+
+---
+
+## [Week 1, Day 3] — `.gitignore`'s `*.log` rule silently excluded a practice file
+
+**What broke:** Created `sample.log` for a `grep`/`awk`/`sed` exercise,
+then later ran `git status` expecting to see it as untracked — instead
+got "nothing to commit, working tree clean," as if the file didn't exist
+to git at all.
+
+**Why I thought it broke:** Assumed the file had somehow already been
+committed in an earlier session I didn't remember, or that something
+was wrong with git itself.
+
+**Actual root cause:** Checked `git log --oneline -- sample.log` (empty —
+never committed) and then `cat .gitignore`, which contained a standard
+Python-template line, `*.log`, meant for framework log files — but it
+matches *any* file ending in `.log`, anywhere in the repo, with no
+awareness of intent. It was silently telling git to ignore the practice
+file entirely.
+
+**Fix:** Renamed the file from `sample.log` to `sample-cdc-pipeline.log.txt`
+so it no longer matches the `*.log` wildcard, confirmed with `git status`
+that it now showed as untracked, then added/committed/pushed normally.
+
+**Time lost:** ~10-15 minutes tracing it back to the `.gitignore` rule.
