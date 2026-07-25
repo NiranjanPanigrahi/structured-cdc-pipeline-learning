@@ -23,8 +23,8 @@
 2026-07-25 09:03:22.501 INFO  [flink-job] Soft delete applied id=932
 2026-07-25 09:04:18.004 WARN  [flink-job] Checkpoint delayed checkpoint_id=44 delay=3789ms
 2026-07-25 09:04:19.775 INFO  [flink-job] Checkpoint completed checkpoint_id=44
-2026-07-25 09:05:41.114 ERROR [kafka-consumer] Failed to deserialize message offset=204
-2026-07-25 09:05:41.117 ERROR [kafka-consumer] Exception=JsonParseException
+2026-07-25 09:05:41.114 CRITICAL [kafka-consumer] Failed to deserialize message offset=204
+2026-07-25 09:05:41.117 CRITICAL [kafka-consumer] Exception=JsonParseException
 2026-07-25 09:05:41.845 INFO  [kafka-consumer] Retrying offset=204 attempt=1
 2026-07-25 09:05:42.416 INFO  [kafka-consumer] Recovery successful offset=204
 2026-07-25 09:06:53.214 INFO  [parquet-writer] Batch flushed records=250 file=batch_090653.parquet size=8.4MB
