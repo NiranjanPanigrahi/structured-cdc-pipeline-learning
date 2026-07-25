@@ -1,0 +1,44 @@
+2026-07-25 09:00:00.102 INFO  [mysql-source] Starting CDC Pipeline v1.2.0
+2026-07-25 09:00:00.231 INFO  [mysql-source] Connected to MySQL host=db-prod-01 port=3306
+2026-07-25 09:00:00.615 INFO  [debezium] Snapshot mode=initial
+2026-07-25 09:00:02.127 INFO  [debezium] Snapshot completed tables=18 rows=52491 duration=1512ms
+2026-07-25 09:00:02.402 INFO  [kafka-producer] Connected broker=kafka01:9092
+2026-07-25 09:00:02.811 INFO  [kafka-producer] Created topic=customer_cdc partitions=3 replication=2
+2026-07-25 09:00:03.221 INFO  [debezium] Event INSERT table=customers id=1001 tx=928311
+2026-07-25 09:00:03.236 INFO  [kafka-producer] Published topic=customer_cdc partition=1 offset=201
+2026-07-25 09:00:03.481 INFO  [flink-job] Consumed partition=1 offset=201
+2026-07-25 09:00:03.528 INFO  [flink-job] Transformation completed latency=47ms
+2026-07-25 09:00:03.671 INFO  [parquet-writer] File=customer_20260725_090003.parquet records=1
+2026-07-25 09:00:04.010 INFO  [dbt] Incremental model dim_customers completed rows=1
+2026-07-25 09:00:04.322 INFO  [airflow] DAG=customer_pipeline task=load_dim SUCCESS duration=0.83s
+2026-07-25 09:01:10.091 INFO  [debezium] Event UPDATE table=customers id=1001 tx=928315
+2026-07-25 09:01:10.123 INFO  [kafka-producer] Published topic=customer_cdc partition=2 offset=202
+2026-07-25 09:01:10.512 INFO  [flink-job] Consumed partition=2 offset=202
+2026-07-25 09:01:10.721 INFO  [parquet-writer] File=customer_20260725_090110.parquet records=1
+2026-07-25 09:01:11.011 INFO  [dbt] Incremental model dim_customers completed rows=1
+2026-07-25 09:02:44.553 WARN  [kafka-producer] Publish latency high=642ms partition=0
+2026-07-25 09:02:44.901 INFO  [kafka-producer] Retry successful after=1 attempt
+2026-07-25 09:03:22.091 INFO  [debezium] Event DELETE table=customers id=932 tx=928330
+2026-07-25 09:03:22.144 INFO  [kafka-producer] Published topic=customer_cdc partition=0 offset=203
+2026-07-25 09:03:22.501 INFO  [flink-job] Soft delete applied id=932
+2026-07-25 09:04:18.004 WARN  [flink-job] Checkpoint delayed checkpoint_id=44 delay=3789ms
+2026-07-25 09:04:19.775 INFO  [flink-job] Checkpoint completed checkpoint_id=44
+2026-07-25 09:05:41.114 ERROR [kafka-consumer] Failed to deserialize message offset=204
+2026-07-25 09:05:41.117 ERROR [kafka-consumer] Exception=JsonParseException
+2026-07-25 09:05:41.845 INFO  [kafka-consumer] Retrying offset=204 attempt=1
+2026-07-25 09:05:42.416 INFO  [kafka-consumer] Recovery successful offset=204
+2026-07-25 09:06:53.214 INFO  [parquet-writer] Batch flushed records=250 file=batch_090653.parquet size=8.4MB
+2026-07-25 09:07:22.814 INFO  [dbt] Running model fact_orders
+2026-07-25 09:07:26.108 INFO  [dbt] Model fact_orders SUCCESS rows=12548 duration=3.29s
+2026-07-25 09:08:11.441 WARN  [airflow] Task retry DAG=customer_pipeline task=refresh_dashboard attempt=2
+2026-07-25 09:08:15.701 INFO  [airflow] Task SUCCESS DAG=customer_pipeline task=refresh_dashboard
+2026-07-25 09:09:51.998 INFO  [metrics] events_processed=10543
+2026-07-25 09:09:51.998 INFO  [metrics] inserts=5211
+2026-07-25 09:09:51.998 INFO  [metrics] updates=4978
+2026-07-25 09:09:51.998 INFO  [metrics] deletes=354
+2026-07-25 09:09:51.998 INFO  [metrics] avg_latency=81ms
+2026-07-25 09:09:51.998 INFO  [metrics] throughput=182 events/sec
+2026-07-25 09:10:00.000 INFO  [pipeline] Graceful shutdown initiated
+2026-07-25 09:10:01.205 INFO  [pipeline] Kafka producer closed
+2026-07-25 09:10:01.662 INFO  [pipeline] Flink checkpoint saved
+2026-07-25 09:10:02.003 INFO  [pipeline] Pipeline stopped successfully
