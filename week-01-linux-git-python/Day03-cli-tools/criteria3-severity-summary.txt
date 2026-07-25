@@ -1,0 +1,3 @@
+      2 CRITICAL
+     39 INFO
+      3 WARN

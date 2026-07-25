@@ -1,0 +1,7 @@
+2026-07-25 09:00:02.402 INFO  [kafka-producer] Connected broker=kafka01:9092
+2026-07-25 09:00:02.811 INFO  [kafka-producer] Created topic=customer_cdc partitions=3 replication=2
+2026-07-25 09:00:03.236 INFO  [kafka-producer] Published topic=customer_cdc partition=1 offset=201
+2026-07-25 09:01:10.123 INFO  [kafka-producer] Published topic=customer_cdc partition=2 offset=202
+2026-07-25 09:02:44.553 WARN  [kafka-producer] Publish latency high=642ms partition=0
+2026-07-25 09:02:44.901 INFO  [kafka-producer] Retry successful after=1 attempt
+2026-07-25 09:03:22.144 INFO  [kafka-producer] Published topic=customer_cdc partition=0 offset=203
