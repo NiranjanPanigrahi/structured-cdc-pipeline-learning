@@ -190,3 +190,78 @@ so it no longer matches the `*.log` wildcard, confirmed with `git status`
 that it now showed as untracked, then added/committed/pushed normally.
 
 **Time lost:** ~10-15 minutes tracing it back to the `.gitignore` rule.
+
+## [Week 1, Day 3] — grep typo silently produced an empty file
+**What broke:** Ran `grep -i "critial" sample-cdc-pipeline.log.txt >
+criteria1-critical-events.txt` — misspelled "critical." `cat` on the output
+file showed nothing.
+**Why I thought it broke:** Assumed grep or the redirect had failed outright.
+**Actual root cause:** Grep ran fine and correctly found zero matches for
+the (misspelled) pattern. `>` still creates the output file regardless of
+whether grep matches anything — an empty result is not the same as an error.
+**Fix:** Re-ran with correct spelling ("critical"), confirmed 2 CRITICAL
+lines in the output.
+**Time lost:** ~5 minutes.
+
+---
+
+## [Week 1, Day 3] — Unclosed quote left the terminal hanging
+**What broke:** Started a command with `"kafka-producer-events.txt` and
+never closed the quote — terminal just sat there waiting, no prompt.
+**Why I thought it broke:** Looked like the terminal had frozen.
+**Actual root cause:** Bash was still waiting for the closing `"` before it
+would treat the command as complete — this is expected behavior, not a bug.
+**Fix:** `Ctrl+C` to cancel and get a fresh prompt, then re-typed the full
+command with matched quotes.
+**Time lost:** <1 minute once recognized.
+
+---
+
+## [Week 1, Day 4] — `mkdir` created a directory instead of a file
+**What broke:** Ran `mkdir servers.log` intending to create a log *file* —
+`mkdir` always creates directories regardless of what the name looks like.
+Ended up `cd`'d into an empty directory named `servers.log`, then couldn't
+`rm` it (wrong location, then `rm` refused since it was a directory).
+**Why I thought it broke:** Assumed the `.log` extension would signal file
+type to the command — it doesn't. Extensions are naming convention only,
+not enforced by the shell or filesystem.
+**Actual root cause:** Used `mkdir` when the goal was file creation.
+`mkdir` = make directory, always. File creation needs `touch`, `nano`, or
+`cat >`.
+**Fix:** `rmdir servers.log` (safe since it was empty) from the parent
+directory, then recreated it correctly as a file.
+**Time lost:** ~2 minutes, no data lost.
+
+---
+
+## [Week 1, Day 4] — Heredoc paste didn't work as one block
+**What broke:** Tried `cat > servers.log << 'EOF' ... EOF` to write
+multi-line content in one shot. Terminal didn't paste it as a single
+atomic command — a stray file literally named `EOF` got created with the
+heredoc body as its content, since bash lost track of the redirect once
+the multi-line paste got split across separate lines.
+**Why I thought it broke:** Assumed heredocs would always paste cleanly
+regardless of terminal.
+**Actual root cause:** Windows Terminal/WSL doesn't always paste multi-line
+input as one atomic block — each line can get sent separately, breaking
+the `<<` redirect mid-command.
+**Fix:** Fell back to `nano servers.log` and typed content directly instead
+of relying on heredoc paste in this terminal.
+**Time lost:** ~3 minutes, cleaned up with `rm EOF`.
+
+---
+
+## [Week 1, Day 4] — `git log` pager garbled the screen
+**What broke:** `git log --oneline -100` piped into `less` (git's default
+pager for long output). Arrow key / scroll input got interpreted as escape
+sequences, scrambling the redraw into repeated garbage blocks (`ESCOC`,
+`ESCOD`, etc.).
+**Why I thought it broke:** Looked like git itself had glitched or the
+terminal had corrupted output.
+**Actual root cause:** Normal `less` pager behavior reacting to unexpected
+key input — nothing was actually broken, just visually messy.
+**Fix:** `q` quits the pager cleanly. `--no-pager` or `| cat` avoids
+launching the pager at all — worth noting `--no-pager` preserves branch
+labels like `(HEAD -> main)` while `| cat` strips them, since piping puts
+git into non-terminal output mode.
+**Time lost:** <1 minute once recognized.
