@@ -18,6 +18,6 @@ Day  Task                                    Done
 2    Linux CLI basics                        ✅
 3    CLI power tools (grep/awk/sed/piping)   ✅
 4    Git fundamentals                        ✅
-5    Git branching & PR workflow             ⬜
+5    Git branching & PR workflow             ✅
 
 Note: See [Day04-git-fundamentals](./Day04-git-fundamentals) for staging area notes and examples.
